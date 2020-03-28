@@ -1,8 +1,8 @@
 __pycache__
-log\
-logs\
+log
+logs
 *.log
 *.exe
 *.env
-idea\
+.idea
 venv
