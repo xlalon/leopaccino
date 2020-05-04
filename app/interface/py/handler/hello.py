@@ -13,5 +13,6 @@ class TestHandler(BaseHandler):
     def get(self):
         x = self.get_argument('x')
         y = self.get_argument('y')
-        sum = add(int(x), int(y))
+        result = add.delay(x, y)
+        sum = result.get(timeout=1)
         return self.write({'x': x, 'y': y, 'sum': sum})

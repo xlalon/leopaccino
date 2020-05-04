@@ -1,6 +1,6 @@
 # -*- coding:utf8 -*-
 
-from app.infra.celery.lpc_app import lpc_app
+from ..lpc_app import lpc_app
 
 
 @lpc_app.task

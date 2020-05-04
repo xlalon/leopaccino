@@ -1,1 +1,1 @@
-celery -A app.infra.celery.lpc_app worker --loglevel=info
+celery -A app.infra.celery.lpc_app worker --loglevel=DEBUG

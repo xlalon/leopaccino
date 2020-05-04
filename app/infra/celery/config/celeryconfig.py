@@ -8,3 +8,4 @@ result_serializer = 'json'
 accept_content = ['json']
 timezone = 'Asia/Shanghai'
 enable_utc = True
+include = ['app.infra.celery.task.test']
