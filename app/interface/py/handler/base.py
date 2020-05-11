@@ -1,6 +1,6 @@
 # -*- coding:utf8 -*-
 
-from tornado.web import RequestHandler, Application
+from tornado.web import RequestHandler
 
 
 class BaseHandler(RequestHandler):

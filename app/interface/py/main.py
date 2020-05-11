@@ -2,6 +2,9 @@
 
 import tornado.ioloop
 import tornado.web
+import sys
+from .config.app_config import BASEDIR
+sys.path.insert(0, BASEDIR)
 
 from .handler import make_app
 
