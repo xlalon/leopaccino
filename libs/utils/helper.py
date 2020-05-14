@@ -10,10 +10,12 @@ g_redis_db = redis.Redis()
 success = 0
 
 
-def cache_with_lock(func=None, *, dft=None, conn=None, acquire_timeout=10, lock_timeout=10):
+def cache_with_lock(func=None, *, lock_name=None, dft=None,
+                    conn=None, acquire_timeout=10, lock_timeout=10):
     if func is None:
         return partial(cache_with_lock,
                        dft=dft,
+                       lock_name=lock_name,
                        conn=conn,
                        acquire_timeout=acquire_timeout,
                        lock_timeout=lock_timeout)
@@ -21,19 +23,19 @@ def cache_with_lock(func=None, *, dft=None, conn=None, acquire_timeout=10, lock_
 
     @wraps(func)
     def wrapper(self, *args, **kwargs):
-        lock_name = str(args)+json.dumps(kwargs)
+        key = lock_name or str(args) + json.dumps(kwargs)
         locked = redis_acquire_lock(
             conn=conn,
-            key=lock_name,
+            key=key,
             acquire_timeout=acquire_timeout,
             lock_timeout=lock_timeout)
         if not locked:
-            print('locked')
+            print('already locked')
             return dft
         try:
             return func(self, *args, **kwargs)
         finally:
-            redis_release_lock(conn, lock_name, locked)
+            redis_release_lock(conn, key, locked)
     return wrapper
 
 
@@ -64,8 +66,8 @@ def redis_release_lock(conn, key, identifier):
                 return True
             pipe.unwatch()
             break
-        except WatchError:
-            pass
+        except (WatchError, AttributeError):
+            return False
     return False
 
 
@@ -87,7 +89,7 @@ if __name__ == '__main__':
     t = []
     for i in range(1000):
         tt = threading.Thread(target=a.b, args=('x',), kwargs={'age': 1})
-        time.sleep(.002)
+        time.sleep(.001)
         tt.start()
         t.append(tt)
     for ttt in t:
