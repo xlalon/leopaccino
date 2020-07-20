@@ -2,11 +2,10 @@ version: '3'
 
 services:
 
-  web:
+  tornado_web:
     build:
       context: .
       dockerfile: python_env.build
-    command: python -m app.interface.py.main
     container_name: leopaccino-tornado-web
     environment:
       - PYTHONUNBUFFERED=1
@@ -15,9 +14,20 @@ services:
     ports:
       - "8080:8888"
     depends_on:
-      - redis
+      - leopaccino_redis
+      - leopaccino_mysql
+    command: python -m app.interface.py.main
 
 
-  redis:
+  leopaccino_redis:
     image: "redis"
-    container_name: redis
+    container_name: leopaccino-redis
+
+  leopaccino_mysql:
+    image: "mysql"
+    container_name: leopaccino-mysql
+    environment:
+      MYSQL_DATABASE: leo_web
+      MYSQL_ROOT_PASSWORD: Xiao0000
+      MYSQL_USER: leo
+      MYSQL_PASSWORD: Xiao0000
