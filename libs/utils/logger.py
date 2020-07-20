@@ -13,8 +13,8 @@ def get_logger(filename,
                max_bytes=5*1024*1024,
                backup=7,
                name=None,
-               datefmt='%d/%b/%Y %H:%M:%S %z',
-               fmt='[%(asctime)s][%(filename)s][lineno:%(lineno)d][%(levelname)s] %(message)s'):
+               datefmt='%d/%b/%y %H:%M:%S',
+               fmt='[%(levelname)s]-[%(asctime)s]-[%(filename)s lineno:%(lineno)d] %(message)s'):
 
     if name is None:
         name = filename.rsplit('.', maxsplit=1)[0]

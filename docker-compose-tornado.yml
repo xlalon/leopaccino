@@ -1,0 +1,23 @@
+version: '3'
+
+services:
+
+  web:
+    build:
+      context: .
+      dockerfile: python_env.build
+    command: python -m app.interface.py.main
+    container_name: leopaccino-tornado-web
+    environment:
+      - PYTHONUNBUFFERED=1
+    volumes:
+      - .:/app/python
+    ports:
+      - "8080:8888"
+    depends_on:
+      - redis
+
+
+  redis:
+    image: "redis"
+    container_name: redis

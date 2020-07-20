@@ -1,12 +1,18 @@
 # -*- coding:utf8 -*-
 
-from .base import BaseHandler
+from redis import Redis
+
 from app.infra.celery.task.test import add
+
+from .base import BaseHandler
+
+redis = Redis(host='redis', port=6379)
 
 
 class HelloHandler(BaseHandler):
     def get(self):
-        self.write("Hello, world")
+        count = redis.incr('hits')
+        self.write('Hello World! 该页面已被访问 {} 次。\n'.format(count))
 
 
 class TestHandler(BaseHandler):
@@ -14,5 +20,5 @@ class TestHandler(BaseHandler):
         x = self.get_argument('x')
         y = self.get_argument('y')
         result = add.delay(x, y)
-        sum = result.get(timeout=1)
-        return self.write({'x': x, 'y': y, 'sum': sum})
+        sum_x_y = result.get(timeout=1)
+        return self.write({'x': x, 'y': y, 'sum': sum_x_y})

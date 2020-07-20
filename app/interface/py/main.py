@@ -2,14 +2,15 @@
 
 import tornado.ioloop
 import tornado.web
-import sys
-from .config.app_config import BASEDIR
-sys.path.insert(0, BASEDIR)
 
 from .handler import make_app
+
+from libs.utils.logger import get_logger
+server_log = get_logger('tornado server')
 
 
 if __name__ == "__main__":
     app = make_app()
     app.listen(8888)
+    server_log.info('listen on 8888')
     tornado.ioloop.IOLoop.current().start()

@@ -1,0 +1,9 @@
+FROM python:3.8
+
+ENV PYTHONUNBUFFERED 1
+
+WORKDIR /app/python
+
+COPY . .
+
+RUN pip install --no-cache-dir -r app/interface/py/requirements.txt
