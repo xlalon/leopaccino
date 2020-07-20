@@ -18,10 +18,11 @@ services:
       - leopaccino_mysql
     command: python -m app.interface.py.main
 
-
   leopaccino_redis:
     image: "redis"
     container_name: leopaccino-redis
+    volumes:
+      - tornado_redis:/data/
 
   leopaccino_mysql:
     image: "mysql"
@@ -31,3 +32,11 @@ services:
       MYSQL_ROOT_PASSWORD: Xiao0000
       MYSQL_USER: leo
       MYSQL_PASSWORD: Xiao0000
+    volumes:
+      - ./logs/my.cnf:/etc/my.cnf
+      - tornado_mysql:/var/lib/mysql
+
+
+volumes:
+  tornado_mysql:
+  tornado_redis:
