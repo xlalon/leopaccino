@@ -1,0 +1,47 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: tornado-web-deployment
+  labels:
+    app: tornado-web
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: tornado-web
+  template:
+    metadata:
+      labels:
+        app: tornado-web
+    spec:
+      containers:
+        - name: tornado-web
+          image: xlalon/tornado_web:1595492043
+          ports:
+            - containerPort: 8080
+          env:
+            - name: TORNADO_MYSQL_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: tornado-mysql-secrets
+                  key: TORNADO_MYSQL_USERNAME
+            - name: TORNADO_MYSQL_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: tornado-mysql-secrets
+                  key: TORNADO_MYSQL_PASSWORD
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: tornado-web-service
+spec:
+  type: LoadBalancer
+  selector:
+    app: tornado-web
+  ports:
+  - protocol: TCP
+    port: 8080
+    targetPort: 8080

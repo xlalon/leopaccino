@@ -5,14 +5,16 @@ from pymysql import connect
 from pymysql.cursors import DictCursor
 
 from app.infra.celery.task.test import add
+from app.interface.py.config.app_config import MysqlConfig
 
 from .base import BaseHandler
 
-redis = Redis(host='leopaccino_redis', port=6379)
-connection = connect(host='leopaccino_mysql',
-                     user='leo',
+redis = Redis(host='10.96.139.53', port=6379)
+connection = connect(host=MysqlConfig.mysql_host,
+                     port=MysqlConfig.mysql_port,
+                     user='root',
                      password='Xiao0000',
-                     database='leo_web',
+                     database=MysqlConfig.mysql_database,
                      charset='utf8mb4',
                      cursorclass=DictCursor)
 
@@ -21,7 +23,6 @@ class HelloHandler(BaseHandler):
     def get(self):
         count = redis.incr('hits')
         with connection.cursor() as cursor:
-            # Create a new record
             sql = "SELECT * FROM test"
             cursor.execute(sql)
             data = cursor.fetchall()
