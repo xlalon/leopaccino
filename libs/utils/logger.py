@@ -5,7 +5,7 @@ import logging
 from datetime import datetime
 from logging.handlers import RotatingFileHandler
 
-BASEDIR = os.path.abspath(os.path.dirname(os.path.dirname(os.path.dirname(__file__))))
+from .config import BASEDIR
 
 
 def get_logger(filename,

@@ -2,12 +2,18 @@
 
 from tornado.web import Application
 
-from .hello import HelloHandler, TestHandler
+from .test import (
+    HelloHandler,
+    TestRedisHandler,
+    TestMysqlHandler,
+    TestCeleryHandler
+)
 
 
 def make_app():
     return Application([
         (r"/", HelloHandler),
-        (r"/add", TestHandler),
-    ])
-
+        (r"/test/redis", TestRedisHandler),
+        (r"/test/mysql", TestMysqlHandler),
+        (r"/test/celery", TestCeleryHandler),
+    ], **{'serve_traceback': True})

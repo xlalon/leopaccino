@@ -2,7 +2,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: tornado-web-deployment
+  name: tornado-web
   labels:
     app: tornado-web
 spec:
@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
         - name: tornado-web
-          image: xlalon/tornado_web:1595492043
+          image: xlalon/tornado_web:v0.1.0
           ports:
             - containerPort: 8080
           env:
@@ -31,12 +31,17 @@ spec:
                 secretKeyRef:
                   name: tornado-mysql-secrets
                   key: TORNADO_MYSQL_PASSWORD
-
+            - name: TORNADO_MYSQL_HOST
+              value: "tornado-mysql-0"
+            - name: TORNADO_MYSQL_DB
+              value: "leo_web"
+            - name: TORNADO_REDIS_HOST
+              value: "tornado-redis-0"
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: tornado-web-service
+  name: tornado-web
 spec:
   type: LoadBalancer
   selector:

@@ -6,3 +6,4 @@ logs/
 test/
 .DS_Store
 .pytest_cache
+*_secret.yaml

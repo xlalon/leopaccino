@@ -1,0 +1,28 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: tornado-mysql
+  labels:
+    app: tornado-mysql
+spec:
+  ports:
+  - name: tornado-mysql
+    port: 3306
+  clusterIP: None
+  selector:
+    app: tornado-mysql
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: tornado-mysql-read
+  labels:
+    app: tornado-mysql
+spec:
+  ports:
+  - name: tornado-mysql
+    port: 3306
+  selector:
+    app: tornado-mysql
