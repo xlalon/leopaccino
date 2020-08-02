@@ -1,9 +1,9 @@
 .idea/
 .git/
 __pycache__
-vendor/
 logs/
 test/
+.env
 .DS_Store
 .pytest_cache
 *_secret.yaml
