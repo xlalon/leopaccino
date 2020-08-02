@@ -24,12 +24,12 @@ spec:
             - name: TORNADO_MYSQL_USERNAME
               valueFrom:
                 secretKeyRef:
-                  name: tornado-mysql-secrets
+                  name: tornado-mysql
                   key: TORNADO_MYSQL_USERNAME
             - name: TORNADO_MYSQL_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: tornado-mysql-secrets
+                  name: tornado-mysql
                   key: TORNADO_MYSQL_PASSWORD
             - name: TORNADO_MYSQL_HOST
               value: "tornado-mysql-0"

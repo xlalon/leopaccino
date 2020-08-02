@@ -1,0 +1,71 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: tornado-redis
+spec:
+  selector:
+    matchLabels:
+      app: tornado-redis
+  serviceName: tornado-redis
+  replicas: 2
+  template:
+    metadata:
+      labels:
+        app: tornado-redis
+    spec:
+      terminationGracePeriodSeconds: 20
+#      affinity:
+#        podAntiAffinity:
+#          preferredDuringSchedulingIgnoredDuringExecution:
+#          - weight: 100
+#            podAffinityTerm:
+#              labelSelector:
+#                matchExpressions:
+#                - key: app
+#                  operator: In
+#                  values:
+#                  - redis
+#              topologyKey: kubernetes.io/hostname
+      containers:
+      - name: tornado-redis
+        image: redis:6.0
+        command:
+          - "redis-server"
+        args:
+          - "/etc/redis/redis.conf"
+          - "--protected-mode"
+          - "no"
+        resources:
+          requests:
+            cpu: "100m"
+            memory: "100Mi"
+        ports:
+            - name: tornado-redis
+              containerPort: 6379
+              protocol: "TCP"
+            - name: cluster
+              containerPort: 16379
+              protocol: "TCP"
+        volumeMounts:
+          - name: "redis-conf"
+            mountPath: "/etc/redis"
+          - name: "redis-data"
+            mountPath: "/var/lib/redis"
+      volumes:
+      - name: "redis-conf"
+        configMap:
+          name: "redis-conf"
+          items:
+            - key: "redis.conf"
+              path: "redis.conf"
+  volumeClaimTemplates:
+  - metadata:
+      name: redis-data
+      annotations:
+        volume.beta.kubernetes.io/storage-class: "managed-nfs-storage"  #这里指定的是class.yaml的name
+    spec:
+      accessModes:
+        - ReadWriteMany  #运行所有主机读写挂载
+      resources:
+        requests:
+          storage: 200Mi
